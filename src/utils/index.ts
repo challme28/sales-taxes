@@ -1,9 +1,16 @@
 const r = /(1 )(.+?)( at )(\d+\.?\d*)/i;
+
+type Product = {
+  name: string;
+  price: number;
+  tax: number;
+  quantity: number;
+};
 export function processList(list: string): string[] {
   const products = list.split('\n').filter((s) => !!s);
-  const productsMap = new Map();
+  const productsMap = new Map<string, Product>();
   products.forEach((productLine: string) => {
-    const match = productLine.match(r);
+    const match = productLine.trim().match(r);
     if (match && match.length > 0) {
       const productKey = match[2] + match[4];
       productsMap.set(productKey, {
@@ -14,6 +21,13 @@ export function processList(list: string): string[] {
       });
     }
   });
+  if (!productsMap.size) {
+    return ['Incorrect shopping basket input'];
+  }
+  return processProductsMap(productsMap);
+}
+
+function processProductsMap(productsMap: Map<string, Product>): string[] {
   let totalTax = 0;
   let total = 0;
   const productLines = [];

@@ -3,26 +3,18 @@ import './App.css';
 import {processList} from './utils';
 
 function App() {
-  const [list, setList] = useState<string>(
-    `1 Book at 12.49
-1 Book at 12.49
-1 Music CD at 14.99
-1 Chocolate bar at 0.85
-1 Imported box of chocolates at 10.00
-1 Imported bottle of perfume at 47.50
-1 Imported bottle of perfume at 27.99
-1 Bottle of perfume at 18.99
-1 Packet of headache pills at 9.75
-1 Imported box of chocolates at 11.25
-1 Imported box of chocolates at 11.25`
-  );
-  const [result, setResult] = useState<string>('');
+  const [shoppingBasket, setShoppingBasket] = useState<string>('');
+  const [receipt, setReceipt] = useState<string>('');
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const {value} = e.target;
-    setList(value);
+    setShoppingBasket(value);
   };
   const handleClickButton = () => {
-    setResult(processList(list).join('\n'));
+    if (!shoppingBasket) {
+      setReceipt('Empty shopping basket');
+      return;
+    }
+    setReceipt(processList(shoppingBasket).join('\n'));
   };
   return (
     <main className="App">
@@ -37,12 +29,12 @@ function App() {
         className="products-list"
         rows={15}
         onChange={handleChange}
-        value={list}
+        value={shoppingBasket}
       />
       <button className="button" onClick={handleClickButton}>
         Generate receipt
       </button>
-      <span className="result">{result}</span>
+      <span className="result">{receipt}</span>
     </main>
   );
 }

@@ -34,8 +34,7 @@ h3 {
   display: block;
   transition: background-color 0.4s;
   margin-bottom: 2rem;
-  border: 0;
-  border-bottom: 1px solid #e3e3e3;
+  border: 1px solid #e3e3e3;
   box-sizing: border-box;
   width: 100%;
   min-height: calc(3.5rem);
