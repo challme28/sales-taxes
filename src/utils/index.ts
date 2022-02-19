@@ -1,18 +1,38 @@
 const r = /(1 )(.+?)( at )(\d+\.?\d*)/i;
 export function processList(list: string): string[] {
   const products = list.split('\n').filter((s) => !!s);
-  const productRes = [];
+  const productsMap = new Map();
   products.forEach((productLine: string) => {
     const match = productLine.match(r);
     if (match && match.length > 0) {
-      productRes.push({
+      const productKey = match[2] + match[4];
+      productsMap.set(productKey, {
         name: match[2],
         price: parseFloat(match[4]),
         tax: calculateTax(match[2], parseFloat(match[4])),
+        quantity: (productsMap.get(productKey)?.quantity || 0) + 1,
       });
     }
   });
-  return products;
+  let totalTax = 0;
+  let total = 0;
+  const productLines = [];
+  for (const product of productsMap.values()) {
+    const priceAndTax = product.price + product.tax;
+    const totalPrice = priceAndTax * product.quantity;
+    let qHelp;
+    if (product.quantity > 1) {
+      qHelp = `(${product.quantity} @ ${priceAndTax})`;
+    }
+    productLines.push(
+      `${product.name}: ${totalPrice.toFixed(2)} ${qHelp || ''}`
+    );
+    totalTax += product.tax * product.quantity;
+    total += totalPrice;
+  }
+  productLines.push(`Sales Taxes: ${totalTax.toFixed(2)}`);
+  productLines.push(`Total: ${total.toFixed(2)}`);
+  return productLines;
 }
 
 const exceptions = [
@@ -26,7 +46,7 @@ const exceptions = [
   'pill',
 ];
 
-function calculateTax(name: string, price: number): string {
+function calculateTax(name: string, price: number): number {
   let tax = 0;
   const lowerName = name.toLowerCase();
   if (lowerName.includes('imported')) {
@@ -35,7 +55,7 @@ function calculateTax(name: string, price: number): string {
   if (!isProductExempt(lowerName)) {
     tax += roundNearestFiveCent(price * 0.1);
   }
-  return tax.toFixed(2);
+  return parseFloat(tax.toFixed(2));
 }
 
 function roundNearestFiveCent(price: number): number {
