@@ -1,57 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import React, {ChangeEvent, useState} from 'react';
 import './App.css';
+import {processList} from './utils';
 
 function App() {
+  const [list, setList] = useState<string>(
+    `1 Imported bottle of perfume at 47.50
+1 Book at 12.49
+1 Book at 12.49
+1 Music CD at 14.99
+1 Chocolate bar at 0.85 
+1 Bottle of perfume at 18.99
+1 Packet of headache pills at 9.75`
+  );
+  const [result, setResult] = useState<string[]>(['']);
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const {value} = e.target;
+    setList(value);
+    setResult(processList(value));
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <main className="App">
+      <textarea
+        name="productsList"
+        id="products-list"
+        cols={30}
+        rows={10}
+        onChange={handleChange}
+        value={list}
+      />
+      <textarea
+        name="result"
+        readOnly
+        id="result"
+        cols={30}
+        rows={10}
+        value={result}
+      />
+    </main>
   );
 }
 
