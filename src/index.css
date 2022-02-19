@@ -7,6 +7,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+p, h3 {
+  margin: 0;
+}
+
+p, textarea, button, span {
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+}
+
+h3 {
+  margin-bottom: 1rem;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
