@@ -5,10 +5,12 @@ import {processList} from './utils';
 function App() {
   const [shoppingBasket, setShoppingBasket] = useState<string>('');
   const [receipt, setReceipt] = useState<string>('');
+
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const {value} = e.target;
     setShoppingBasket(value);
   };
+
   const handleClickButton = () => {
     if (!shoppingBasket) {
       setReceipt('Empty shopping basket');
@@ -16,6 +18,7 @@ function App() {
     }
     setReceipt(processList(shoppingBasket).join('\n'));
   };
+
   return (
     <main className="App">
       <section className="instructions">
