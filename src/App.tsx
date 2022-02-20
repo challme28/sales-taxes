@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useState} from 'react';
 import './App.css';
-import {processList} from './utils';
+import {processList} from './receipt-generator';
 
 function App() {
   const [shoppingBasket, setShoppingBasket] = useState<string>('');
