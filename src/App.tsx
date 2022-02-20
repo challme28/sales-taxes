@@ -1,57 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import React, {ChangeEvent, useState} from 'react';
 import './App.css';
+import {processList} from './receipt-generator';
 
 function App() {
+  const [shoppingBasket, setShoppingBasket] = useState<string>('');
+  const [receipt, setReceipt] = useState<string>('');
+
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const {value} = e.target;
+    setShoppingBasket(value);
+  };
+
+  const handleClickButton = () => {
+    if (!shoppingBasket) {
+      setReceipt('Empty shopping basket');
+      return;
+    }
+    setReceipt(processList(shoppingBasket).join('\n'));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <main className="App">
+      <section className="instructions">
+        <h3>Please enter your shopping basket with the following format:</h3>
+        <p className="product-line">1 Book at 12.49</p>
+        <p className="product-example">(quantity) (name) at (price)</p>
+        <p className="product-line">1 Imported bottle of perfume at 47.50</p>
+        <p className="product-example">(quantity) (name) at (price)</p>
+      </section>
+      <textarea
+        className="products-list"
+        rows={15}
+        onChange={handleChange}
+        value={shoppingBasket}
+      />
+      <button className="button" onClick={handleClickButton}>
+        Generate receipt
+      </button>
+      <span className="result">{receipt}</span>
+    </main>
   );
 }
 
