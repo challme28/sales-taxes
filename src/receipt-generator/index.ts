@@ -15,6 +15,7 @@ export function processList(list: string): string[] {
   const products = list.split('\n').filter((s) => !!s);
   const productsMap = new Map<string, Product>();
   let line;
+  let unmatched = false;
   products.some((productLine: string, index: number): boolean => {
     // trim spaces and match with regex
     const match = productLine.trim().match(r);
@@ -29,6 +30,7 @@ export function processList(list: string): string[] {
       });
       line = index + 2;
     } else {
+      unmatched = true;
       return true;
     }
     return false;
@@ -36,7 +38,7 @@ export function processList(list: string): string[] {
   if (!productsMap.size) {
     return ['Incorrect shopping basket input'];
   }
-  if (productsMap.size !== products.length) {
+  if (unmatched) {
     return [`Incorrect input at line ${line}`];
   }
   return processProductsMap(productsMap);

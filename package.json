@@ -41,5 +41,11 @@
   },
   "devDependencies": {
     "prettier": "2.5.1"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "src/index.tsx",
+      "src/serviceWorker.ts"
+    ]
   }
 }
